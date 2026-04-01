@@ -1,0 +1,180 @@
+Building configuration...
+
+Current configuration : 3126 bytes
+!
+! Last configuration change at 10:55:59 UTC Fri Mar 20 2026
+!
+version 15.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname SW-821
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 9 $9$w/7/5ssGEFbswa$OY3Y59jk3FvMh3y9PpTmJY9GxvIPwN7zSYcLosv7IA.
+!
+username admin secret 9 $9$Cd2h.EDpHB.GOc$VqCjOYURjWw.9IazqjW/tc4l6ylJD0Ki/WKYyMNkG4A
+no aaa new-model
+switch 1 provision c1000-24t-4g-l
+system mtu routing 1500
+!
+!
+ip dhcp snooping vlan 42
+ip domain-name local
+ip igmp snooping vlan 42 mrouter learn cgmp
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+!
+vlan configuration 42
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet1/0/1
+ description PC_ADMIN
+ switchport access vlan 10
+ switchport mode access
+!
+interface GigabitEthernet1/0/2
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/3
+ shutdown
+!
+interface GigabitEthernet1/0/4
+ shutdown
+!
+interface GigabitEthernet1/0/5
+ shutdown
+!
+interface GigabitEthernet1/0/6
+ shutdown
+!
+interface GigabitEthernet1/0/7
+ shutdown
+!
+interface GigabitEthernet1/0/8
+ shutdown
+!
+interface GigabitEthernet1/0/9
+ shutdown
+!
+interface GigabitEthernet1/0/10
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/11
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/12
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/13
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/14
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/15
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/16
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/17
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/18
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/19
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/20
+ description RASPBERRY_LAN
+ switchport access vlan 20
+ switchport mode access
+!
+interface GigabitEthernet1/0/21
+ shutdown
+!
+interface GigabitEthernet1/0/22
+ shutdown
+!
+interface GigabitEthernet1/0/23
+ shutdown
+!
+interface GigabitEthernet1/0/24
+ shutdown
+!
+interface GigabitEthernet1/0/25
+!
+interface GigabitEthernet1/0/26
+!
+interface GigabitEthernet1/0/27
+!
+interface GigabitEthernet1/0/28
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan10
+ ip address 192.168.42.1 255.255.255.0
+!
+interface Vlan20
+ no ip address
+!
+ip default-gateway 192.168.42.254
+ip http server
+ip http banner
+ip http secure-server
+ip ssh version 2
+!
+!
+!
+!
+line con 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login
+ transport input none
+!
+end
