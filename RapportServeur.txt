@@ -1,0 +1,32 @@
+Rapport d'implémentation : Nœud Serveur et Communication MQTT
+Dans le cadre de ce projet IoT, ma responsabilité s'est portée sur la conception, la configuration et la programmation du nœud Serveur. L'objectif était de mettre en place l'infrastructure réseau nécessaire à la communication MQTT et de développer la logique centrale du jeu de réactivité.
+
+Voici les étapes chronologiques de la réalisation :
+
+Étape 1 : Mise en place de l'infrastructure réseau et du Broker MQTT
+
+Installation des dépendances : Le langage Python 3.14 a été utilisé conjointement avec la librairie paho-mqtt pour la gestion du protocole. Le service mosquitto a été installé localement sur la machine faisant office de serveur.
+
+Configuration de la sécurité du Broker : Par défaut, Mosquitto restreint les communications à la boucle locale (localhost). Le fichier de configuration mosquitto.conf a été modifié en y ajoutant les directives listener 1883 0.0.0.0 et allow_anonymous true afin d'autoriser les équipements distants du réseau universitaire à s'y connecter.
+
+Ouverture des ports : Une règle de trafic entrant a été configurée dans le Pare-feu Windows Defender pour autoriser les flux TCP sur le port standard MQTT (1883), permettant ainsi au client de joindre l'adresse IP du serveur (192.168.141.54).
+
+Étape 2 : Développement de la logique serveur en Python
+Le script serveur (serveur.py) a été conçu pour orchestrer le déroulement des parties selon le diagramme de séquence défini, en utilisant l'architecture de publication et d'abonnement (Publish/Subscribe) :
+
+Initialisation : Le script se connecte au broker local et s'abonne immédiatement au topic Jeu/+/Temps (l'utilisation du caractère générique + permet d'écouter dynamiquement les temps de réaction de l'ensemble des clients connectés).
+
+Gestion des cycles de jeu : Un menu interactif permet à l'administrateur de lancer une manche. Le serveur publie alors la valeur 1 sur le topic Jeu/Start pour déclencher les chronomètres clients, puis observe une période d'attente de 5 secondes pour la collecte des données, avant de publier la valeur 0 indiquant la fin de la manche.
+
+Traitement des données : Les temps de réaction reçus sont stockés temporairement dans un dictionnaire. À la fin de la manche, le serveur exécute une fonction de comparaison (min()) pour identifier la valeur la plus basse. Le nom du vainqueur est ensuite publié sur le topic Jeu/Gagnant.
+
+Étape 3 : Implémentation de la sécurité anti-triche
+Lors des tests, un phénomène de "Faux Départ" a été identifié : l'appui prématuré ou répété sur la touche d'action remplissait la mémoire tampon du client, générant des temps de réaction impossibles (de l'ordre de 0.0001 seconde).
+Pour pallier ce problème, une condition de validation a été ajoutée dans la fonction de réception des messages (on_message). Le serveur rejette désormais automatiquement toute donnée strictement inférieure à 0.1 seconde, seuil physique de la réaction humaine, garantissant ainsi l'intégrité des résultats.
+
+Étape 4 : Persistance des données et historique
+Afin de conserver une trace des résultats au-delà de l'exécution du script, un système de persistance a été intégré.
+À l'issue de chaque manche valide, le serveur met à jour une liste en mémoire vive pour l'affichage via le menu interactif, et procède simultanément à l'écriture séquentielle (mode append) des résultats (numéro de manche, identifiant du gagnant et temps) dans un fichier texte local nommé historique_scores.txt.
+
+Étape 5 : Validation de la communication client-serveur
+Des tests d'intégration ont été réalisés avec le script client. Le client a pu se connecter avec succès au broker hébergé sur le serveur via le réseau local de l'établissement. L'échange bidirectionnel (envoi des signaux de départ par le serveur et réception des temps de réaction provenant du client) a été validé fonctionnellement.
