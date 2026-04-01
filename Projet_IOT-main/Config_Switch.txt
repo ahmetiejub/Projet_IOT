@@ -5,29 +5,21 @@ Current configuration : 3453 bytes
 ! Last configuration change at 07:36:45 UTC Wed Apr 1 2026 
 ! 
 version 15.2 
-
 no service pad 
-
 service timestamps debug datetime msec 
-
 service timestamps log datetime msec 
-
 no service password-encryption 
 ! 
 hostname SW-821 
 ! 
 boot-start-marker 
-
 boot-end-marker 
 ! 
 enable secret 9 $9$Pzw2Y63eEPM283$MS1i7pj7k2mOqvuD4kchVER/sIMgeo75FF0LujSrnfk 
 ! 
 username admin secret 9 $9$Efr4wyFZSxGVFr$Rsr7d7Qn3ZcYPpcA2FTu5biJTFk.N/XRBgZb7oQk1tM 
-
 no aaa new-model 
-
 switch 1 provision c1000-24t-4g-l 
-
 system mtu routing 1500 
 ! 
 ! 
@@ -38,7 +30,6 @@ ip domain-name local
 ! 
 ! 
 spanning-tree mode rapid-pvst 
-
 spanning-tree extend system-id 
 ! 
 vlan internal allocation policy ascending 
