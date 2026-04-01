@@ -4,8 +4,11 @@ from paho.mqtt import client as mqtt_client
 import time
 from uuid import uuid1
 
+from driver_led import DriverLED
+from driver_bp  import DriverBP
+
 # Adresse et port du serveur MQTT
-BROKER = '192.168.141.54'
+BROKER = '192.168.141.210'
 PORT = 1883
 
 client_id = str(uuid1())
@@ -30,13 +33,17 @@ def connect_mqtt(broker, port) -> mqtt_client:
     return client
 
 def jeu(client):
+	bp = DriverBP()
 	attente = random.randint(1, 5)
 	print("allumage des LEDs rouges")
+	self.sense.clear(255,0,0)
 	time.sleep(attente)
 	
-	time_start = time.monotonic()
 	print("allumage des LEDs vertes / start timer")
-	input()
+	self.sense.clear(0,255,0)
+	time_start = time.monotonic()
+	
+	while(not bp.on_appui(on_appui)):
 	time_end = time.monotonic()
 	
 	delai = time_end - time_start
