@@ -2,13 +2,13 @@
 import random
 from paho.mqtt import client as mqtt_client
 import time
-
+from uuid import uuid1
 
 # Adresse et port du serveur MQTT
 BROKER = '192.168.141.54'
 PORT = 1883
 
-client_id = f"{random.randint(0, 10000)}"
+client_id = str(uuid1())
 
 TOPICS = {"Start":"Jeu/Start", "Gagnant":"Jeu/Gagnant" , "Temps": f"Jeu/{client_id}/Temps" }
 
